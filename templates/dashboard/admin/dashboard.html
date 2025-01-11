@@ -1,5 +1,216 @@
 {% extends "dashboard/admin/includes/base.html" %}
+{% load humanize %}
 
 {% block content %}
-<h1>Dashboard</h1>
+<div class="row">
+    <div class="col min-vh-100 admin-container p-4">
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-xl-3 col-sm-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-muted">Total Donations</h6>
+                                <h2>{{ total_donations|intcomma }}</h2>
+                            </div>
+                            <div class="icon-shape bg-success text-white rounded-circle">
+                                <i class="fa fa-donate"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-muted">Total Earnings</h6>
+                                <h2>${{ total_earnings|intcomma }}</h2>
+                            </div>
+                            <div class="icon-shape bg-primary text-white rounded-circle">
+                                <i class="fa fa-dollar-sign"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-muted">Total Members</h6>
+                                <h2>{{ total_members|intcomma }}</h2>
+                            </div>
+                            <div class="icon-shape bg-info text-white rounded-circle">
+                                <i class="fa fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-muted">Total Campaigns</h6>
+                                <h2>{{ total_campaigns|intcomma }}</h2>
+                            </div>
+                            <div class="icon-shape bg-warning text-white rounded-circle">
+                                <i class="fa fa-bullhorn"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">Donations Last 30 Days</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="donationsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Latest Members & Recent Campaigns -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Latest Members</h5>
+                        <a href="#" class="btn btn-sm btn-primary">View All</a>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for member in latest_members %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-0">{{ member.get_full_name|default:"N/A" }}</h6>
+                                    <small class="text-muted">Joined {{ member.date_joined|date:"d M, Y" }}</small>
+                                </div>
+                                <span class="badge bg-success">Active</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Recent Campaigns</h5>
+                        <a href="{% url 'admin_dashboard:campaigns' %}" class="btn btn-sm btn-primary">View All</a>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for campaign in recent_campaigns %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-0">{{ campaign.title }}</h6>
+                                    <small class="text-muted">by {{ campaign.user.get_full_name }} / {{ campaign.date|date:"d M, Y" }}</small>
+                                </div>
+                                <span class="badge bg-{{ campaign.status|yesno:'success,secondary' }}">
+                                    {{ campaign.get_status_display }}
+                                </span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Chart data
+    const dates = {{ chart_dates|safe }};
+    const amounts = {{ chart_amounts|safe }};
+    const counts = {{ chart_counts|safe }};
+
+    // Donations Chart
+    new Chart(document.getElementById('donationsChart'), {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Amount ($)',
+                data: amounts,
+                borderColor: '#28a745',
+                backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                yAxisID: 'y',
+                fill: true
+            }, {
+                label: 'Number of Donations',
+                data: counts,
+                borderColor: '#007bff',
+                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                yAxisID: 'y1',
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value;
+                        }
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    beginAtZero: true,
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
+
+{% block css %}
+<style>
+    .icon-shape {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .icon-shape i {
+        font-size: 24px;
+    }
+    .bg-success { background-color: #28a745; }
+    .bg-primary { background-color: #007bff; }
+    .bg-info { background-color: #17a2b8; }
+    .bg-warning { background-color: #ffc107; }
+</style>
 {% endblock %}
