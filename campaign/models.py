@@ -127,3 +127,11 @@ class Donation(models.Model):
             base=url_base, hash=email_hash, qs=query_string
         )
         return default if self.anonymous == 0 else url
+
+    @property
+    def admin_earnings(self):
+        return self.donation * 0.05
+    
+    @property
+    def admin_earnings_formatted(self):
+        return f"${self.admin_earnings:.2f}"

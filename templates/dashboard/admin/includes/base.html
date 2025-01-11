@@ -34,35 +34,21 @@
                 <div class="offcanvas-body px-0 scrollbar">
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-start list-sidebar" id="menu">
                         <li class="nav-item">
-                            <a href="{% url 'admin_dashboard:home' %}" class="nav-link text-truncate ">
+                            <a href="{% url 'admin_dashboard:home' %}" class="nav-link text-truncate {% if request.path == '/admin/' %}active{% endif %}">
                             <i class="fa-solid fa-gauge me-2"></i> Dashboard
                             </a>
                         </li>
                         <!-- /end list -->
                         <li class="nav-item">
-                            <a href="#settings" data-bs-toggle="collapse" class="nav-link text-truncate dropdown-toggle " >
-                                <i class="fa-solid fa-gear me-2"></i> General Settings
-                            </a>
-                        </li>
-                        <!-- /end list -->
-                        <div class="collapse w-100  ps-3" id="settings">
-                            <li>
-                                <a class="nav-link text-truncate w-100 " href="/panel/admin/settings">
-                                <i class="fa-solid fa-chevron-right fs-7 me-1"></i> General
-                                </a>
-                            </li>
-                        </div>
-                        <!-- /end list -->
-                        <li class="nav-item">
-                            <a href="{% url 'admin_dashboard:campaigns' %}" class="nav-link text-truncate  active ">
+                            <a href="{% url 'admin_dashboard:campaigns' %}" class="nav-link text-truncate {% if request.path == '/admin/campaigns/' %}active{% endif %}">
                             <i class="fa-solid fa-bullhorn me-2"></i>
                             Campaigns
                             </a>
                         </li>
                         <!-- /end list -->
                         <li class="nav-item">
-                            <a href="/panel/admin/donations" class="nav-link text-truncate ">
-                            <i class="fa-solid fa-money-bill-stack me-2"></i>
+                            <a href="{% url 'admin_dashboard:donations' %}" class="nav-link text-truncate {% if request.path == '/admin/donations/' %}active{% endif %}">
+                            <i class="far fa-money-bill-alt me-2"></i>
                             Donations
                             </a>
                         </li>

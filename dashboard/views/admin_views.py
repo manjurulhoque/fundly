@@ -108,9 +108,34 @@ class AdminCampaignsView(SuperUserRequiredMixin, ListView):
         return context
 
 
-class AdminDonationsView(SuperUserRequiredMixin, View):
-    def get(self, request):
-        return render(request, "dashboard/admin/donations.html")
+class AdminDonationsView(SuperUserRequiredMixin, ListView):
+    model = Donation
+    template_name = "dashboard/admin/donations.html"
+    context_object_name = "donations"
+    paginate_by = 10
+    
+    def get_queryset(self):
+        return Donation.objects.select_related(
+            'campaign'
+        ).order_by('-date')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'total_donations': Donation.objects.filter(
+                approved=True
+            ).count(),
+            'total_amount': Donation.objects.filter(
+                approved=True
+            ).aggregate(Sum('donation'))['donation__sum'] or 0,
+            'pending_amount': Donation.objects.filter(
+                approved=False
+            ).aggregate(Sum('donation'))['donation__sum'] or 0,
+            'admin_earnings': (Donation.objects.filter(
+                approved=True
+            ).aggregate(Sum('donation'))['donation__sum'] or 0) * 0.05  # 5% platform fee
+        })
+        return context
 
 
 class AdminCampaignEditView(SuperUserRequiredMixin, UpdateView):
