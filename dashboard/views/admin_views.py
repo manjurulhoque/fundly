@@ -48,17 +48,17 @@ class AdminDashboardView(SuperUserRequiredMixin, View):
 
         # Create lookup dictionary
         donations_dict = {
-            d["day"]: {"total": d["total"], "count": d["count"]}
+            d["day"].strftime("%Y-%m-%d"): {"total": d["total"], "count": d["count"]}
             for d in daily_donations
         }
-
+        
         while current_date <= end_date:
             dates.append(current_date.strftime("%Y-%m-%d"))
             # Convert current_date to datetime for dictionary lookup
             current_datetime = timezone.make_aware(
                 datetime.combine(current_date, datetime.min.time())
             )
-            day_data = donations_dict.get(current_datetime, {"total": 0, "count": 0})
+            day_data = donations_dict.get(current_datetime.strftime("%Y-%m-%d"), {"total": 0, "count": 0})
             amounts.append(float(day_data["total"] or 0))
             counts.append(day_data["count"])
             current_date += timedelta(days=1)
@@ -77,6 +77,8 @@ class AdminDashboardView(SuperUserRequiredMixin, View):
             "chart_amounts": amounts,
             "chart_counts": counts,
         }
+        
+        # print(context)
 
         return render(request, "dashboard/admin/dashboard.html", context)
 

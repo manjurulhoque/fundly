@@ -78,23 +78,23 @@
                             <img src="" width="32" height="32" class="rounded-circle">
                             </a>
                             <div class="dropdown-menu dropdown-menu-macos dropdown-menu dropdown-menu-end dd-menu-user" aria-labelledby="dropdown03">
-                                <a class="dropdown-item" href="/panel/admin">Panel Admin</a>
+                                <a class="dropdown-item" href="{% url 'admin_dashboard:home' %}">Panel Admin</a>
                                 <div class="dropdown-divider"></div>
-                                <a href="/dashboard" class="dropdown-item">
-                                Dashboard
+                                <a href="{% url 'admin_dashboard:home' %}" class="dropdown-item">
+                                    Dashboard
                                 </a>
-                                <a href="/dashboard/campaigns" class="dropdown-item">
-                                Campaigns
+                                <a href="{% url 'admin_dashboard:campaigns' %}" class="dropdown-item">
+                                    Campaigns
                                 </a>
-                                <a href="/user/likes" class="dropdown-item">
-                                Likes
+                                <a href="{% url 'admin_dashboard:donations' %}" class="dropdown-item">
+                                    Donations
                                 </a>
-                                <a href="/account" class="dropdown-item">
-                                Account Settings
+                                <a href="{% url 'admin_dashboard:members' %}" class="dropdown-item">
+                                    Members
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a href="/logout" class="logout dropdown-item">
-                                Log out
+                                <a href="{% url 'accounts:logout' %}" class="logout dropdown-item">
+                                    Log out
                                 </a>
                             </div>
                         </div>
@@ -123,6 +123,7 @@
             </footer>
         </main>
         <script src="{% static 'plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
         <script src="{% static 'plugins/select2/select2.full.min.js' %}"></script>
         {% block scripts %}

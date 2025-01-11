@@ -62,6 +62,12 @@ A modern crowdfunding platform built with Django that enables users to create an
 ![Charts Page](screenshots/charts.png)
 *Charts page*
 
+![Admin dashboard Page](screenshots/dashboard.png)
+*Admin dashboard page*
+
+![Admin campaigns Page](screenshots/campaigns.png)
+*Admin campaigns page*
+
 ## Tech Stack
 
 ### Backend
