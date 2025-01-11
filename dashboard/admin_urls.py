@@ -10,6 +10,9 @@ from .views.admin_views import (
     AdminCategoryCreateView,
     AdminCategoryUpdateView,
     AdminCategoryDeleteView,
+    AdminMembersView,
+    AdminMemberToggleView,
+    AdminMemberDeleteView,
 )
 
 app_name = 'admin_dashboard'
@@ -26,4 +29,8 @@ urlpatterns = [
     path('categories/create/', AdminCategoryCreateView.as_view(), name='category-create'),
     path('categories/<int:pk>/edit/', AdminCategoryUpdateView.as_view(), name='category-edit'),
     path('categories/delete/', AdminCategoryDeleteView.as_view(), name='category-delete'),
+    
+    path('members/', AdminMembersView.as_view(), name='members'),
+    path('members/toggle/', AdminMemberToggleView.as_view(), name='member-toggle'),
+    path('members/delete/', AdminMemberDeleteView.as_view(), name='member-delete'),
 ]

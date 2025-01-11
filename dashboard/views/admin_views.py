@@ -225,3 +225,41 @@ class AdminCategoryDeleteView(SuperUserRequiredMixin, View):
         except Category.DoesNotExist:
             messages.error(request, 'Category not found!')
         return redirect('admin_dashboard:categories')
+
+
+class AdminMembersView(SuperUserRequiredMixin, ListView):
+    model = User
+    template_name = "dashboard/admin/members.html"
+    context_object_name = "members"
+    paginate_by = 10
+
+    def get_queryset(self):
+        return User.objects.select_related("country").order_by("-date_joined")
+
+
+class AdminMemberToggleView(SuperUserRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        member_id = request.POST.get('id')
+        try:
+            member = User.objects.get(id=member_id)
+            member.is_active = not member.is_active
+            member.save()
+            messages.success(
+                request, 
+                f'Member {member.username} {"activated" if member.is_active else "deactivated"} successfully!'
+            )
+        except User.DoesNotExist:
+            messages.error(request, 'Member not found!')
+        return redirect('admin_dashboard:members')
+
+
+class AdminMemberDeleteView(SuperUserRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        member_id = request.POST.get('id')
+        try:
+            member = User.objects.get(id=member_id)
+            member.delete()
+            messages.success(request, 'Member deleted successfully!')
+        except User.DoesNotExist:
+            messages.error(request, 'Member not found!')
+        return redirect('admin_dashboard:members')

@@ -1,0 +1,93 @@
+{% extends "dashboard/admin/includes/base.html" %}
+{% load humanize %}
+
+{% block content %}
+<div class="row">
+    <div class="col min-vh-100 admin-container p-4">
+        <h5 class="mb-4 fw-light">
+            <a class="text-reset" href="{% url 'admin_dashboard:home' %}">Dashboard</a>
+            <i class="fa-solid fa-chevron-right me-1 fs-6"></i>
+            <span class="text-muted">Members</span>
+        </h5>
+
+        <div class="card shadow-custom border-0">
+            <div class="card-body p-lg-4">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Country</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for member in members %}
+                            <tr>
+                                <td>{{ member.id }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ member.avatar_url }}" alt="{{ member.get_full_name }}" 
+                                             class="rounded-circle me-2" style="width: 32px; height: 32px;">
+                                        {{ member.get_full_name|default:member.username }}
+                                    </div>
+                                </td>
+                                <td>{{ member.email }}</td>
+                                <td>{{ member.country.name|default:"N/A" }}</td>
+                                <td>{{ member.date_joined|date:"d M, Y" }}</td>
+                                <td>
+                                    <span class="badge bg-{{ member.is_active|yesno:'success,danger' }}">
+                                        {{ member.is_active|yesno:"Active,Inactive" }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <form method="POST" action="{% url 'admin_dashboard:member-toggle' %}" class="me-2">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" value="{{ member.id }}">
+                                            <button type="submit" class="btn btn-{{ member.is_active|yesno:'warning,success' }} btn-sm rounded-pill">
+                                                <i class="fa-solid fa-{{ member.is_active|yesno:'ban,check' }}"></i>
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{% url 'admin_dashboard:member-delete' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" value="{{ member.id }}">
+                                            <button type="button" class="btn btn-danger btn-sm rounded-pill actionDelete">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center">No members found</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {% include "dashboard/admin/includes/pagination.html" %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    $('.actionDelete').click(function(e) {
+        e.preventDefault();
+        if (confirm('Are you sure you want to delete this member?')) {
+            $(this).closest('form').submit();
+        }
+    });
+});
+</script>
+{% endblock %} 

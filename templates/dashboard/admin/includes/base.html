@@ -54,49 +54,16 @@
                         </li>
                         <!-- /end list -->
                         <li class="nav-item">
-                            <a href="/panel/admin/withdrawals" class="nav-link text-truncate ">
-                            <i class="fa-solid fa-bank me-2"></i>
-                            Withdrawals
-                            </a>
-                        </li>
-                        <!-- /end list -->
-                        <li class="nav-item">
-                            <a href="{% url 'admin_dashboard:categories' %}" class="nav-link text-truncate ">
+                            <a href="{% url 'admin_dashboard:categories' %}" class="nav-link text-truncate {% if request.path == '/admin/categories/' %}active{% endif %}">
                             <i class="fa-solid fa-list me-2"></i> Categories
                             </a>
                         </li>
                         <!-- /end list -->
                         <li class="nav-item">
-                            <a href="/panel/admin/members" class="nav-link text-truncate ">
+                            <a href="{% url 'admin_dashboard:members' %}" class="nav-link text-truncate {% if request.path == '/admin/members/' %}active{% endif %}">
                             <i class="fa-solid fa-users me-2"></i> Members
                             </a>
                         </li>
-                        <!-- /end list -->
-                        <li class="nav-item">
-                            <a href="/panel/admin/campaigns/reported" class="nav-link text-truncate ">
-                            <i class="fa-solid fa-triangle-exclamation me-2"></i>
-                            Campaigns Reported
-                            </a>
-                        </li>
-                        <!-- /end list -->
-                        <li class="nav-item">
-                            <a href="#payments" data-bs-toggle="collapse" class="nav-link text-truncate dropdown-toggle " >
-                            <i class="fa-solid fa-credit-card me-2"></i> Payment Settings
-                            </a>
-                        </li>
-                        <!-- /end list -->
-                        <div class="collapse w-100 ps-3 " id="payments">
-                            <li>
-                                <a class="nav-link text-truncate " href="/panel/admin/payment/add">
-                                <i class="fa-solid fa-chevron-right fs-7 me-1"></i> Add Payment
-                                </a>
-                            </li>
-                            <li>
-                                <a class="nav-link text-truncate " href="/panel/admin/payments">
-                                <i class="fa-solid fa-chevron-right fs-7 me-1"></i> General
-                                </a>
-                            </li>
-                        </div>
                     </ul>
                 </div>
             </div>
