@@ -77,11 +77,11 @@
                                 <td>{{ campaign.deadline|date:"d M, Y"|default:"No deadline" }}</td>
                                 <td>
                                     <div class="d-flex">
-                                        <a href="" 
+                                        <a href="{% url 'admin_dashboard:campaign-edit' campaign.id %}" 
                                            class="btn btn-success rounded-pill btn-sm me-2">
                                             <i class="fa-solid fa-pen"></i>
                                         </a>
-                                        <form method="POST" action="" class="d-inline-block">
+                                        <form method="POST" action="{% url 'admin_dashboard:campaign-delete' %}" class="d-inline-block">
                                             {% csrf_token %}
                                             <input name="id" type="hidden" value="{{ campaign.id }}">
                                             <button class="btn btn-danger rounded-pill btn-sm e-none actionDelete" type="button">

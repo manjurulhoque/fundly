@@ -1,0 +1,152 @@
+{% extends "dashboard/admin/includes/base.html" %}
+{% load humanize %}
+
+{% block content %}
+<div class="row">
+    <div class="col min-vh-100 admin-container p-4">
+        <h5 class="mb-4 fw-light">
+            <a class="text-reset" href="{% url 'admin_dashboard:home' %}">Dashboard</a>
+            <i class="fa-solid fa-chevron-right me-1 fs-6"></i>
+            <a class="text-reset" href="{% url 'admin_dashboard:campaigns' %}">Campaigns</a>
+            <i class="fa-solid fa-chevron-right me-1 fs-6"></i>
+            <span class="text-muted">Edit Campaign</span>
+        </h5>
+
+        <div class="card shadow-custom border-0">
+            <div class="card-body p-lg-4">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if messages %}
+                        <div class="messages mb-4">
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            Please correct the errors below.
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <!-- Title -->
+                        <div class="col-md-12 mb-3">
+                            <label for="id_title" class="form-label">Title</label>
+                            <input type="text" name="title" id="id_title" class="form-control {% if form.title.errors %}is-invalid{% endif %}" value="{{ form.title.value|default:'' }}" required>
+                            {% if form.title.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.title.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Description -->
+                        <div class="col-md-12 mb-3">
+                            <label for="id_description" class="form-label">Description</label>
+                            <textarea name="description" id="id_description" class="form-control {% if form.description.errors %}is-invalid{% endif %}" rows="5" required>{{ form.description.value|default:'' }}</textarea>
+                            {% if form.description.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.description.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Goal -->
+                        <div class="col-md-6 mb-3">
+                            <label for="id_goal" class="form-label">Goal Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" name="goal" id="id_goal" class="form-control {% if form.goal.errors %}is-invalid{% endif %}" value="{{ form.goal.value|default:'' }}" required>
+                            </div>
+                            {% if form.goal.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.goal.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Status -->
+                        <div class="col-md-6 mb-3">
+                            <label for="id_status" class="form-label">Status</label>
+                            <select name="status" id="id_status" class="form-select {% if form.status.errors %}is-invalid{% endif %}" required>
+                                <option value="pending" {% if form.status.value == 'pending' %}selected{% endif %}>Pending</option>
+                                <option value="active" {% if form.status.value == 'active' %}selected{% endif %}>Active</option>
+                                <option value="completed" {% if form.status.value == 'completed' %}selected{% endif %}>Completed</option>
+                            </select>
+                            {% if form.status.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.status.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Category -->
+                        <div class="col-md-6 mb-3">
+                            <label for="id_category" class="form-label">Category</label>
+                            <select name="category" id="id_category" class="form-select {% if form.category.errors %}is-invalid{% endif %}" required>
+                                {% for category in form.category %}
+                                    {{ category }}
+                                {% endfor %}
+                            </select>
+                            {% if form.category.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.category.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Deadline -->
+                        <div class="col-md-6 mb-3">
+                            <label for="id_deadline" class="form-label">Deadline</label>
+                            <input type="date" name="deadline" id="id_deadline" class="form-control {% if form.deadline.errors %}is-invalid{% endif %}" value="{{ form.deadline.value|date:'Y-m-d' }}" required>
+                            {% if form.deadline.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.deadline.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Image -->
+                        <div class="col-md-6 mb-3">
+                            <label for="id_image" class="form-label">Campaign Image</label>
+                            {% if campaign.image %}
+                                <div class="mb-2">
+                                    <img src="{{ campaign.image.url }}" alt="Current campaign image" class="img-thumbnail" style="max-height: 150px;">
+                                </div>
+                            {% endif %}
+                            <input type="file" name="image" id="id_image" class="form-control {% if form.image.errors %}is-invalid{% endif %}" accept="image/*">
+                            <small class="text-muted d-block mt-1">Leave empty to keep current image</small>
+                            {% if form.image.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.image.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Location -->
+                        <div class="col-md-6 mb-3">
+                            <label for="id_location" class="form-label">Location</label>
+                            <input type="text" name="location" id="id_location" class="form-control {% if form.location.errors %}is-invalid{% endif %}" value="{{ form.location.value|default:'' }}" required>
+                            {% if form.location.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.location.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Update Campaign</button>
+                        <a href="{% url 'admin_dashboard:campaigns' %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

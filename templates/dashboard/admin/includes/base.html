@@ -14,9 +14,11 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
         <style>
             :root {
-            --color-default: #000000;
+                --color-default: #000000;
             }
         </style>
+        {% block css %}
+        {% endblock %}
     </head>
     <body>
         <div class="overlay" data-bs-toggle="offcanvas" data-bs-target="#sidebar-nav"></div>
@@ -52,7 +54,7 @@
                         </div>
                         <!-- /end list -->
                         <li class="nav-item">
-                            <a href="/panel/admin/campaigns" class="nav-link text-truncate  active ">
+                            <a href="{% url 'admin_dashboard:campaigns' %}" class="nav-link text-truncate  active ">
                             <i class="fa-solid fa-bullhorn me-2"></i>
                             Campaigns
                             </a>
@@ -115,7 +117,7 @@
             <header class="py-3 mb-3 shadow-custom bg-white">
                 <div class="container-fluid d-grid gap-3 px-4 justify-content-end position-relative">
                     <div class="d-flex align-items-center">
-                        <a class="text-dark ms-2 animate-up-2 me-4" href="">
+                        <a class="text-dark ms-2 animate-up-2 me-4" href="{% url 'core:home' %}" target="_blank">
                         View site <i class="fa-solid fa-arrow-up-right"></i>
                         </a>
                         <div class="flex-shrink-0 dropdown">
@@ -150,6 +152,16 @@
                 </div>
             </header>
             <div class="container-fluid">
+                <div class="container">
+                    {% if messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+                </div>
                 {% block content %}
                 {% endblock %}
             </div>
