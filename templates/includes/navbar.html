@@ -75,6 +75,14 @@
                             <i class="ion-chevron-down margin-lft5"></i>
                         </a>
                         <ul class="dropdown-menu arrow-up nav-session" role="menu" aria-labelledby="dropdownMenu4">
+                            {% if request.user.is_superuser %}
+                                <li>
+                                    <a href="{% url 'admin_dashboard:home' %}" class="text-overflow">
+                                        <i class="icon icon-dashboard myicon-right"></i> Admin Dashboard
+                                    </a>
+                                </li>
+                            {% endif %}
+                            
                             <li>
                                 <a href="{% url 'dashboard:home' %}" class="text-overflow">
                                     <i class="icon icon-dashboard myicon-right"></i> My Dashboard

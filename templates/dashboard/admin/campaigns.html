@@ -1,0 +1,141 @@
+{% extends "dashboard/admin/includes/base.html" %}
+{% load humanize %}
+
+{% block content %}
+<div class="row">
+    <div class="col min-vh-100 admin-container p-4">
+        <h5 class="mb-4 fw-light">
+            <a class="text-reset" href="{% url 'admin_dashboard:home' %}">Dashboard</a>
+            <i class="fa-solid fa-chevron-right me-1 fs-6"></i>
+            <span class="text-muted">Campaigns</span>
+        </h5>
+
+        <!-- Stats Summary -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h6 class="card-title">Total Campaigns</h6>
+                        <h2>{{ total_campaigns|intcomma }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h6 class="card-title">Active Campaigns</h6>
+                        <h2>{{ active_campaigns|intcomma }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h6 class="card-title">Total Raised</h6>
+                        <h2>${{ total_raised|intcomma }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-custom border-0">
+            <div class="card-body p-lg-4">
+                <div class="table-responsive p-0">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>User</th>
+                                <th>Goal</th>
+                                <th>Funds Raised</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Deadline</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for campaign in campaigns %}
+                            <tr>
+                                <td>{{ campaign.id }}</td>
+                                <td>
+                                    <a href="{% url 'campaign:campaign-detail' campaign.id %}" target="_blank">
+                                        {{ campaign.title|truncatechars:30 }} 
+                                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                    </a>
+                                </td>
+                                <td>{{ campaign.user.get_full_name }}</td>
+                                <td>${{ campaign.goal|intcomma }}</td>
+                                <td>${{ campaign.total_raised|default:0|intcomma }}</td>
+                                <td>
+                                    <span class="badge bg-{{ campaign.status|yesno:'success,secondary' }}">
+                                        {{ campaign.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>{{ campaign.date|date:"d M, Y" }}</td>
+                                <td>{{ campaign.deadline|date:"d M, Y"|default:"No deadline" }}</td>
+                                <td>
+                                    <div class="d-flex">
+                                        <a href="" 
+                                           class="btn btn-success rounded-pill btn-sm me-2">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </a>
+                                        <form method="POST" action="" class="d-inline-block">
+                                            {% csrf_token %}
+                                            <input name="id" type="hidden" value="{{ campaign.id }}">
+                                            <button class="btn btn-danger rounded-pill btn-sm e-none actionDelete" type="button">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="9" class="text-center">No campaigns found</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {% if is_paginated %}
+        <ul class="pagination d-flex justify-content-center mt-4">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    $(document).ready(function() {
+        $('.actionDelete').click(function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to delete this campaign?')) {
+                $(this).closest('form').submit();
+            }
+        });
+    });
+    </script>
+{% endblock %}

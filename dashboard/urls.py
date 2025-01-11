@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import DashboardView, CampaignListView, DonationListView
+from .views.common_views import DashboardView, CampaignListView, DonationListView
 
 app_name = 'dashboard'
 

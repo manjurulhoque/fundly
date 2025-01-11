@@ -1,0 +1,166 @@
+{% load static %}
+<!doctype html>
+<html lang="en" data-bs-theme="light" id="theme-asset">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="shortcut icon" href="{% static 'img/favicon.png' %}" />
+        <title>Admin Dashboard</title>
+
+        <link href="{% static 'admin/core.css' %}" rel="stylesheet">
+        <link href="{% static 'admin/admin-styles.css' %}" rel="stylesheet">
+        <link href="{% static 'admin/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'admin/styles.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+        <style>
+            :root {
+            --color-default: #000000;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="overlay" data-bs-toggle="offcanvas" data-bs-target="#sidebar-nav"></div>
+        <div class="popout font-default"></div>
+        <main>
+            <div class="offcanvas offcanvas-start sidebar bg-dark text-white" tabindex="-1" id="sidebar-nav" data-bs-keyboard="false" data-bs-backdrop="false">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title"><img src="{% static 'img/logo.png' %}" width="100" /></h5>
+                    <button type="button" class="btn-close btn-close-custom text-white toggle-menu d-lg-none" data-bs-dismiss="offcanvas" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="offcanvas-body px-0 scrollbar">
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-start list-sidebar" id="menu">
+                        <li class="nav-item">
+                            <a href="{% url 'admin_dashboard:home' %}" class="nav-link text-truncate ">
+                            <i class="fa-solid fa-gauge me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <!-- /end list -->
+                        <li class="nav-item">
+                            <a href="#settings" data-bs-toggle="collapse" class="nav-link text-truncate dropdown-toggle " >
+                                <i class="fa-solid fa-gear me-2"></i> General Settings
+                            </a>
+                        </li>
+                        <!-- /end list -->
+                        <div class="collapse w-100  ps-3" id="settings">
+                            <li>
+                                <a class="nav-link text-truncate w-100 " href="/panel/admin/settings">
+                                <i class="fa-solid fa-chevron-right fs-7 me-1"></i> General
+                                </a>
+                            </li>
+                        </div>
+                        <!-- /end list -->
+                        <li class="nav-item">
+                            <a href="/panel/admin/campaigns" class="nav-link text-truncate  active ">
+                            <i class="fa-solid fa-bullhorn me-2"></i>
+                            Campaigns
+                            </a>
+                        </li>
+                        <!-- /end list -->
+                        <li class="nav-item">
+                            <a href="/panel/admin/donations" class="nav-link text-truncate ">
+                            <i class="fa-solid fa-money-bill-stack me-2"></i>
+                            Donations
+                            </a>
+                        </li>
+                        <!-- /end list -->
+                        <li class="nav-item">
+                            <a href="/panel/admin/withdrawals" class="nav-link text-truncate ">
+                            <i class="fa-solid fa-bank me-2"></i>
+                            Withdrawals
+                            </a>
+                        </li>
+                        <!-- /end list -->
+                        <li class="nav-item">
+                            <a href="/panel/admin/categories" class="nav-link text-truncate ">
+                            <i class="fa-solid fa-list me-2"></i> Categories
+                            </a>
+                        </li>
+                        <!-- /end list -->
+                        <li class="nav-item">
+                            <a href="/panel/admin/members" class="nav-link text-truncate ">
+                            <i class="fa-solid fa-users me-2"></i> Members
+                            </a>
+                        </li>
+                        <!-- /end list -->
+                        <li class="nav-item">
+                            <a href="/panel/admin/campaigns/reported" class="nav-link text-truncate ">
+                            <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                            Campaigns Reported
+                            </a>
+                        </li>
+                        <!-- /end list -->
+                        <li class="nav-item">
+                            <a href="#payments" data-bs-toggle="collapse" class="nav-link text-truncate dropdown-toggle " >
+                            <i class="fa-solid fa-credit-card me-2"></i> Payment Settings
+                            </a>
+                        </li>
+                        <!-- /end list -->
+                        <div class="collapse w-100 ps-3 " id="payments">
+                            <li>
+                                <a class="nav-link text-truncate " href="/panel/admin/payment/add">
+                                <i class="fa-solid fa-chevron-right fs-7 me-1"></i> Add Payment
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-link text-truncate " href="/panel/admin/payments">
+                                <i class="fa-solid fa-chevron-right fs-7 me-1"></i> General
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+            <header class="py-3 mb-3 shadow-custom bg-white">
+                <div class="container-fluid d-grid gap-3 px-4 justify-content-end position-relative">
+                    <div class="d-flex align-items-center">
+                        <a class="text-dark ms-2 animate-up-2 me-4" href="">
+                        View site <i class="fa-solid fa-arrow-up-right"></i>
+                        </a>
+                        <div class="flex-shrink-0 dropdown">
+                            <a href="#" class="d-block link-dark text-decoration-none" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="" width="32" height="32" class="rounded-circle">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-macos dropdown-menu dropdown-menu-end dd-menu-user" aria-labelledby="dropdown03">
+                                <a class="dropdown-item" href="/panel/admin">Panel Admin</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="/dashboard" class="dropdown-item">
+                                Dashboard
+                                </a>
+                                <a href="/dashboard/campaigns" class="dropdown-item">
+                                Campaigns
+                                </a>
+                                <a href="/user/likes" class="dropdown-item">
+                                Likes
+                                </a>
+                                <a href="/account" class="dropdown-item">
+                                Account Settings
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="/logout" class="logout dropdown-item">
+                                Log out
+                                </a>
+                            </div>
+                        </div>
+                        <a class="ms-4 toggle-menu d-block d-lg-none text-dark fs-3 position-absolute start-0" data-bs-toggle="offcanvas" data-bs-target="#sidebar-nav" href="#">
+                        <i class="fa-solid fa-bars"></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+            <div class="container-fluid">
+                {% block content %}
+                {% endblock %}
+            </div>
+            <footer class="admin-footer px-4 py-3 bg-white shadow-custom">
+                &copy; Fundly | Crowdfunding Platform - 2025
+            </footer>
+        </main>
+        <script src="{% static 'plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
+        <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'plugins/select2/select2.full.min.js' %}"></script>
+        {% block scripts %}
+        {% endblock %}
+    </body>
+</html>

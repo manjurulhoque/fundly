@@ -5,7 +5,7 @@ from django.db import models
 from django.utils.http import urlencode
 from django.utils.timezone import now
 from django.templatetags.static import static
-
+from django.db.models import Sum
 from accounts.models import User
 from core.models import Category
 
@@ -27,11 +27,54 @@ class Campaign(models.Model):
         return self.title
 
     def image_url(self):
-        return self.image.url if self.image else "https://placehold.co/600x400?text=No+Image"
+        return (
+            self.image.url
+            if self.image
+            else "https://placehold.co/600x400?text=No+Image"
+        )
 
     def days_remaining(self):
         delta = self.deadline - datetime.now().date()
         return delta.days
+
+    @property
+    def total_raised(self):
+        return (
+            self.donation_set.filter(approved=True).aggregate(Sum("donation"))[
+                "donation__sum"
+            ]
+            or 0
+        )
+
+    def total_donations(self):
+        return self.donation_set.aggregate(Sum("donation"))["donation__sum"] or 0
+
+    def total_donations_approved(self):
+        return (
+            self.donation_set.filter(approved=True).aggregate(Sum("donation"))[
+                "donation__sum"
+            ]
+            or 0
+        )
+
+    def total_donations_pending(self):
+        return (
+            self.donation_set.filter(approved=False).aggregate(Sum("donation"))[
+                "donation__sum"
+            ]
+            or 0
+        )
+
+    def total_donations_rejected(self):
+        return (
+            self.donation_set.filter(approved=False).aggregate(Sum("donation"))[
+                "donation__sum"
+            ]
+            or 0
+        )
+
+    def get_status_display(self):
+        return self.status.upper()
 
 
 class Donation(models.Model):
