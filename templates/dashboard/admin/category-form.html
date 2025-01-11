@@ -1,0 +1,56 @@
+{% extends "dashboard/admin/includes/base.html" %}
+{% load humanize %}
+
+{% block content %}
+<div class="row">
+    <div class="col min-vh-100 admin-container p-4">
+        <h5 class="mb-4 fw-light">
+            <a class="text-reset" href="{% url 'admin_dashboard:home' %}">Dashboard</a>
+            <i class="fa-solid fa-chevron-right me-1 fs-6"></i>
+            <a class="text-reset" href="{% url 'admin_dashboard:categories' %}">Categories</a>
+            <i class="fa-solid fa-chevron-right me-1 fs-6"></i>
+            <span class="text-muted">Edit Category</span>
+        </h5>
+
+        <div class="card shadow-custom border-0">
+            <div class="card-body p-lg-4">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    {% if messages %}
+                    <div class="messages mb-4">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.name == 'image' and category.image %}
+                        <div class="mt-2">
+                            <img src="{{ category.image.url }}" alt="{{ category.name }}" class="img-fluid" style="max-width: 70px;">
+                        </div>
+                        {% endif %}
+                        {% if field.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ field.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Update Category</button>
+                        <a href="{% url 'admin_dashboard:categories' %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -5,7 +5,11 @@ from .views.admin_views import (
     AdminCampaignsView,
     AdminCampaignEditView,
     AdminCampaignDeleteView,
-    AdminDonationsView
+    AdminDonationsView,
+    AdminCategoriesView,
+    AdminCategoryCreateView,
+    AdminCategoryUpdateView,
+    AdminCategoryDeleteView,
 )
 
 app_name = 'admin_dashboard'
@@ -17,4 +21,9 @@ urlpatterns = [
     path('campaigns/delete/', AdminCampaignDeleteView.as_view(), name='campaign-delete'),
     
     path('donations/', AdminDonationsView.as_view(), name='donations'),
+    
+    path('categories/', AdminCategoriesView.as_view(), name='categories'),
+    path('categories/create/', AdminCategoryCreateView.as_view(), name='category-create'),
+    path('categories/<int:pk>/edit/', AdminCategoryUpdateView.as_view(), name='category-edit'),
+    path('categories/delete/', AdminCategoryDeleteView.as_view(), name='category-delete'),
 ]
