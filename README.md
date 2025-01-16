@@ -96,7 +96,7 @@ A modern crowdfunding platform built with Django that enables users to create an
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/fundly.git
+git clone https://github.com/manjurulhoque/fundly.git
 cd fundly
 ```
 
