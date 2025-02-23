@@ -6,7 +6,7 @@ SECRET_KEY = '%g0w^#k4h6@au72654i++-jd&-7p@+(rikbnv227eoe+_(#h%*'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -92,6 +92,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 AUTH_USER_MODEL = "accounts.User"
 
