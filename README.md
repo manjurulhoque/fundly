@@ -2,6 +2,8 @@
 
 A modern crowdfunding platform built with Django that enables users to create and manage fundraising campaigns for various causes.
 
+Live: [Demo](http://fundly.manjurulhoque.com/)
+
 ## Features
 
 ### User Management
