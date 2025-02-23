@@ -14,9 +14,7 @@ class HomeView(ListView):
     
     def get_queryset(self):
         # Get 6 most recent active campaigns
-        return Campaign.objects.filter(
-            status="active"
-        ).prefetch_related(
+        return Campaign.objects.prefetch_related(
             "user"
         ).order_by(
             '-date'
