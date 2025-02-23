@@ -4,6 +4,7 @@ charset-normalizer==3.4.1
 Django==5.0.10
 django-debug-toolbar==4.4.6
 Faker==33.1.0
+gunicorn==23.0.0
 idna==3.10
 packaging==24.2
 pillow==11.0.0
