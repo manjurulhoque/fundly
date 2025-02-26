@@ -41,30 +41,33 @@
                       {% elif campaign.days_remaining == 0 %}
                           <strong>Last Day</strong>
                       {% else %}
-                          <strong class="text-danger">No time anymore</strong>
+                          <strong class="text-danger">Campaign Ended</strong>
                       {% endif %}
-
-                  {% endif %}
-
-                    <strong class="text-danger">Campaign Ended</strong>
-
+                  
+                  {%else%}
                     <strong>No Deadline</strong>
+                  {% endif %}
+                    
+
+
+
                 </em>
 
               </span>
 
                 <span class="stats-campaigns">
                     <span class="pull-left">
-                        <strong>400</strong>
+                        <strong>{{campaign.total_raised}}</strong>
+            
                         Raised
                     </span>
                     <span class="pull-right">
-                        <strong>40%</strong>
+            <strong>{{campaign.raised_percentage}}%</strong>
                     </span>
                 </span>
 
                 <span class="progress">
-                    <span class="percentage" style="width: 40%" aria-valuemin="0" aria-valuemax="100" role="progressbar"></span>
+          <span class="percentage" style="width: {{campaign.raised_percentage}}%" aria-valuemin="0" aria-valuemax="100" role="progressbar"></span>
                 </span>
             </p>
 
