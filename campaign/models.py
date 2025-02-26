@@ -57,10 +57,19 @@ class Campaign(models.Model):
             ]
             or 0
         )
+  
+    
+    @property 
+    def raised_percentage(self):
+        return round((self.total_raised / self.goal) * 100,2)
 
+
+    @property
     def total_donations(self):
         return self.donation_set.aggregate(Sum("donation"))["donation__sum"] or 0
 
+    
+    @property
     def total_donations_approved(self):
         return (
             self.donation_set.filter(approved=True).aggregate(Sum("donation"))[
@@ -68,7 +77,9 @@ class Campaign(models.Model):
             ]
             or 0
         )
-
+    
+    
+    @property
     def total_donations_pending(self):
         return (
             self.donation_set.filter(approved=False).aggregate(Sum("donation"))[
@@ -77,6 +88,7 @@ class Campaign(models.Model):
             or 0
         )
 
+
     def total_donations_rejected(self):
         return (
             self.donation_set.filter(approved=False).aggregate(Sum("donation"))[
@@ -84,6 +96,7 @@ class Campaign(models.Model):
             ]
             or 0
         )
+
 
     def get_status_display(self):
         return self.status.upper()
